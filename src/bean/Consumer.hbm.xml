@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-8-19 15:24:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="bean.Consumer" table="consumer">
+        <id name="cid" type="java.lang.Integer">
+            <column name="cid" />
+            <generator class="native" />
+        </id>
+        <property name="cname" type="java.lang.String">
+            <column name="cname" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+        <property name="integration" type="java.lang.Integer">
+            <column name="integration" />
+        </property>
+         <property name="phone" type="java.lang.String">
+            <column name="phone" />
+        </property>
+           <property name="sex" type="java.lang.String">
+            <column name="sex" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="email" />
+        </property>
+    </class>
+</hibernate-mapping>

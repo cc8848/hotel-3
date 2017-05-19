@@ -1,0 +1,25 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-8-19 15:24:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="bean.hotel_worker" table="worker">
+        <id name="wid" type="java.lang.Integer">
+            <column name="wid" />
+            <generator class="native" />
+        </id>
+        <property name="name" type="java.lang.String">
+            <column name="name" />
+        </property>
+        <property name="truename" type="java.lang.String">
+            <column name="truename" />
+        </property>
+        <property name="sex" type="java.lang.String">
+            <column name="sex" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+         <many-to-one name="hotels" column="Hid" cascade="save-update" class="bean.Hotel">
+		</many-to-one>
+    </class>
+</hibernate-mapping>

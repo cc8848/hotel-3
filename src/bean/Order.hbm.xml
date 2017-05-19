@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-8-19 15:24:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="bean.Order" table="Order1">
+        <id name="orderid" type="java.lang.Integer">
+            <column name="Orderid" />
+            <generator class="native" />
+        </id>
+      <property name="truename" type="java.lang.String">
+            <column name="truename" />
+                 </property>
+                     <property name="integration" type="java.lang.Integer">
+            <column name="integration" />
+                 </property>
+                 <property name="price" type="double">
+            <column name="price" />
+                 </property>
+       
+                   <property name="phone" type="java.lang.String">
+            <column name="phone" />
+                 </property>
+               <property name="orderInDate" type="java.util.Date">
+            <column name="orderInDate" />
+                 </property>
+                 
+                     <property name="orderOutDate" type="java.util.Date">
+            <column name="orderOutDate" />
+                 </property>
+                 
+                 <property name="status" type="java.lang.Integer">
+            <column name="status" />
+                 </property>
+            
+        <many-to-one name="room" lazy="false" class="bean.room">
+            <column name="roomId" />
+        </many-to-one>
+        <many-to-one name="consumer" lazy="false" class="bean.Consumer">
+            <column name="cid" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC 
+"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+
+	<package name="default" namespace="/" extends="struts-default">
+		<!--顾客action-->
+		<action name="consumerService" class="consumerAction">
+			<result name="success" >/info/consumerInfo.jsp</result>
+			<result name="consumerUpdate">/info/changePwd.jsp</result>
+			<result name="updateSuc">/info/result2.jsp</result>
+			<result name="input" type="redirect">/login.jsp</result>
+			<result name="loginout" type="redirect">/login.jsp</result>
+		</action>
+		<!--注册action-->
+		<action name="saveUser" class="consumerAction">
+			<result name="success" type="redirect">consumerService!findConsumer</result>
+			<result name="failure" >/rresult.jsp</result>
+		<result name="addUs" type="redirectAction">listUser!allConsumer</result>		
+		</action>
+		<!-- 员工登录 -->
+		<action name="workerService" class="workerAction">
+			<result name="success" type="redirect">/info/workerInfo.jsp</result>
+			<result name="input" type="redirect">/workerLogin.jsp</result>
+		</action>
+		<!-- 管理员登录 -->
+		<action name="adminService" class="adminAction">
+			<result name="success" >/info/admininfo.jsp</result>
+			<result name="input" type="redirect">/adminLogin.jsp</result>
+		</action>
+		<!-- 查询酒店 -->
+		<action name="hotelService" class="hotelAction">
+			<result name="success">/hotellist.jsp</result>
+				<result name="success2">/unloginhotel.jsp</result>
+		</action>
+		<!--查询房间-->
+		<action name="roomService" class="roomAction">
+			<result name="success">/room/through.jsp</result>
+		</action>
+		<!--留言action-->
+	<action name="messageService" class="messageAction">
+	<result name="success" >/message/list.jsp</result>
+	<result name="add" >/message/addMessage.jsp</result>
+	<result name="addsuc" type="redirectAction">messageService!throughMessage?hotel.hid=%{hotel.hid}</result>
+	</action>
+	<action name="unmessageService" class="messageAction">
+	<result name="success" >/unmessage.jsp</result>
+	</action>
+	</package>
+
+	<!-- 客户后才能访问的Action -->
+	<package name="authorityUser" extends="struts-default">
+		<interceptors>
+			<interceptor name="authority" class="interceptor.ConsumerInterceptor" />
+			<interceptor-stack name="mydefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="authority" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefault" />
+		<global-results>
+			<result name="login">/index.jsp</result>
+		</global-results>
+			
+		<!-- 预订房间 -->
+		<action name="saveOrder" class="orderAction">
+			<result name="success">/order/add.jsp</result>
+			<result name="write">/order/write.jsp</result>
+			<result name="addSuc" type="redirectAction">orderService!consumerOrder</result>
+			<result name="input">/info/result.jsp</result>
+		</action>
+		
+		<!-- 查看预定信息 -->
+		<action name="orderService" class="orderAction">
+			<result name="success">/info/orderInfo.jsp</result>
+			<result name="input">/info/result.jsp</result>
+		</action>
+		<!--取消订单-->
+		<action name="deleteOrder" class="orderAction">
+		<result name="success" type="redirectAction">orderService!consumerOrder</result>
+		</action>
+	</package>
+	<!-- 员工登入后才能访问的action -->
+	<package name="authorityAdmin" extends="struts-default">
+		<interceptors>
+			<interceptor name="authorityAdmin" class="interceptor.WorkerInterceptor" />
+			<interceptor-stack name="mydefaultAdmin">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="authorityAdmin" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefaultAdmin" />
+		<global-results>
+			<result name="login">/workerLogin.jsp</result>
+		</global-results>	
+		
+		<!-- 查询所有订单 -->
+		<action name="listOrder" class="orderAction">
+			<result name="success">/order/list.jsp</result>
+		</action>		
+		<!--处理订单-->
+		<action name="changeOrder" class="orderAction">
+		<result name="success" type="redirectAction">listOrder</result>
+		</action>
+			</package>		
+			
+			<!-- 管理员登入后才能访问的action -->
+			<package name="authorityAdmin1" extends="struts-default">
+		<interceptors>
+			<interceptor name="authorityAdmin1" class="interceptor.AdminInterceptor" />
+			<interceptor-stack name="mydefaultAdmin1">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="authorityAdmin1" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefaultAdmin1" />
+		<global-results>
+			<result name="login">/adminLogin.jsp</result>
+		</global-results>
+		<!-- 查询所有酒店 -->
+	<action name="listHotel" class="hotelAction">
+			<result name="success">/hotel/list.jsp</result>
+		</action>
+		
+		<!-- 查询所有房间 -->
+		<action name="findroombyhid" class="roomAction">
+			<result name="success">/room/list.jsp</result>
+		</action>
+		<!-- 修改房间 -->
+		<action name="updatePRoom" class="roomAction">
+			<result name="success">/room/update.jsp</result>		
+			<result name="input" type="redirectAction">/room/update.jsp</result>
+		</action>
+	   <action name="updateRoom" class="roomAction">
+			<result name="success" type="redirectAction">findroombyhid?hotel.hid=%{hotel.hid}</result>
+			<result name="input" type="redirectAction">findroombyhid</result>
+		</action>
+		<!-- 增加房间 -->
+		<action name="saveRoom" class="roomAction">
+		<result name="success" >/room/add.jsp</result>
+			<result name="addsuc" type="redirectAction">findroombyhid?hotel.hid=%{hotel.hid}</result>
+		</action>
+		<!-- 删除房间 -->
+		<action name="deleteRoom" class="roomAction">
+		    <result name="success" type="redirectAction">findroombyhid?hotel.hid=%{hotel.hid}</result>
+		</action>
+		<!-- 查询所有客户 -->
+		<action name="listUser" class="consumerAction">
+			<result name="success">/consumer/list.jsp</result>
+		</action>
+		<!-- 删除客户 -->
+		<action name="deleteUser" class="consumerAction">
+			<result name="success" type="redirectAction">listUser!allConsumer</result>
+		</action>
+		
+		<!-- 修改酒店 -->
+		<action name="updatePHotel" class="hotelAction">
+			<result name="success">/hotel/update.jsp</result>		
+		</action>
+		<action name="updateHotel" class="hotelAction">
+			<result name="success" type="redirectAction">listHotel</result>
+		</action>
+		<!-- 增加酒店 -->
+		<action name="saveHotel" class="hotelAction">
+			<result name="success" type="redirectAction">listHotel</result>		
+		</action>
+		
+		<!-- 查询员工 -->
+		<action name="findworkerbyhid" class="workerAction">
+			<result name="success">/worker/list.jsp</result>
+		</action>
+		<!-- 删除员工 -->
+		<action name="deleteworker" class="workerAction">
+			<result name="success" type="redirectAction">findworkerbyhid!findWorkerbyHid?hotel.hid=%{hotel.hid}</result>
+		</action>
+		
+		<!-- 增加员工 -->
+		<action name="addworker" class="workerAction">
+			<result name="addsuc" type="redirectAction">findworkerbyhid!findWorkerbyHid?hotel.hid=%{hotel.hid}</result>
+		</action>
+		<!-- 查询评价 -->
+		<action name="findmessagebyhid" class="messageAction">
+			<result name="success" >/message/admlist.jsp</result>
+		</action>
+		<!-- 删除评价 -->
+		<action name="deleteMessage" class="messageAction">
+			<result name="deletesuc" type="redirectAction">findmessagebyhid!throughMessage?hotel.hid=%{hotel.hid}</result>
+		</action>
+			</package>
+</struts>
+

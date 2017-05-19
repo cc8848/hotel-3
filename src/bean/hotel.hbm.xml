@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-8-19 15:24:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="bean.Hotel" table="Hotel">
+        <id name="hid" type="java.lang.Integer">
+            <column name="Hid" />
+            <generator class="native" />
+        </id>
+        <property name="city" type="java.lang.String">
+            <column name="city" />
+        </property>
+        <property name="hname" type="java.lang.String">
+            <column name="hname" />
+        </property>
+        <property name="hotelAddr" type="java.lang.String">
+            <column name="Address" />
+        </property>
+         <property name="description" type="java.lang.String">
+            <column name="description" />
+        </property>
+        <set name="rooms" inverse ="true" lazy="true">
+			<key>
+			<column name="hid" not-null="true"/>
+			</key>
+		<one-to-many class="bean.room"/>
+		</set>
+		   <set name="workers" inverse ="true" lazy="true">
+			<key>
+			<column name="hid" not-null="true"/>
+			</key>
+		<one-to-many class="bean.hotel_worker"/>
+		</set>
+		 <set name="messages" inverse ="true" lazy="true">
+			<key>
+			<column name="hid" not-null="true"/>
+			</key>
+		<one-to-many class="bean.Message"/>
+		</set>
+	</class>
+ 
+</hibernate-mapping>

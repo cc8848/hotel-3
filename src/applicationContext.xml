@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+	</bean>
+	<!-- DAO配置 -->
+	<bean id="messageDao" class="dao.impl.messageDaoimpl">
+	<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="adminDao" class="dao.impl.adminDaoimpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="hotelDao" class="dao.impl.hotelDaoimpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="consumerDao" class="dao.impl.consumerDaoimpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="workerDao" class="dao.impl.workerDaoimpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="roomDao" class="dao.impl.RoomDaoimpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="orderDao" class="dao.impl.OrderDaoimpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 配置Service -->
+	<bean id="messageService" class="service.impl.messageServiceimpl">
+	<property name="messageDao" ref="messageDao"/>
+	</bean>
+	
+	<bean id="adminService" class="service.impl.adminServiceimpl">
+		<property name="adminDao" ref="adminDao" />
+	</bean>
+	<bean id="hotelService" class="service.impl.hotelServiceimpl">
+		<property name="hotelDao" ref="hotelDao" />
+	</bean>
+	<bean id="consumerService" class="service.impl.ConsumerServiceimpl">
+		<property name="consumerDao" ref="consumerDao" />
+	</bean>
+	<bean id="workerService" class="service.impl.workerServiceimpl">
+		<property name="workerDao" ref="workerDao" />
+	</bean>
+	<bean id="roomService" class="service.impl.RoomServiceimpl">
+		<property name="roomDao" ref="roomDao" />
+	</bean>
+	<bean id="orderService" class="service.impl.OrderServiceimpl">
+		<property name="orderDao" ref="orderDao" />
+	</bean>
+	<!-- 配置Action -->
+
+	<bean id="messageAction" class="action.messageAction" scope="prototype">
+	<property name="messageService" ref="messageService"/>
+	</bean>
+	<bean id="consumerAction" class="action.consumerAction" scope="prototype">
+		<property name="consumerService" ref="consumerService" />
+	</bean>
+	<bean id="hotelAction" class="action.hotelAction" scope="prototype">
+		<property name="hotelService" ref="hotelService" />
+	</bean>
+	<bean id="workerAction" class="action.workerAction" scope="prototype">
+		<property name="workerService" ref="workerService" />
+	</bean>
+	<bean id="roomAction" class="action.roomAction" scope="prototype">
+		<property name="roomService" ref="roomService" />
+	</bean>
+	<bean id="adminAction" class="action.adminAction" scope="prototype">
+		<property name="adminService" ref="adminService" />
+	</bean>
+	<bean id="orderAction" class="action.orderAction">
+		<property name="orderService" ref="orderService" />
+		<property name="roomService" ref="roomService" />
+		<property name="consumerService" ref="consumerService" />
+	</bean>
+	<!-- 配置事务的管理 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 配置事务的通知 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 配置切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* service.*.*(..))"
+			id="serviceMethod" />
+		<!-- 将事务的通知和切面交给通知者管理 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod" />
+	</aop:config>
+</beans>

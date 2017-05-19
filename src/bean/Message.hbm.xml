@@ -1,0 +1,28 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-8-19 15:24:19 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="bean.Message" table="Message">
+        <id name="mid" type="java.lang.Integer">
+            <column name="mid" />
+            <generator class="native" />
+        </id>
+           <property name="message" type="java.lang.String">
+            <column name="message" />
+                 </property>
+                  <property name="roomtype" type="java.lang.String">
+            <column name="roomtype" />
+                 </property>
+                    <property name="consumername" type="java.lang.String">
+            <column name="consumername" />
+                 </property>
+                   <property name="hotelid" type="java.lang.Integer">
+            <column name="hotelid" />
+                 </property>
+                  
+        <many-to-one name="hotel" lazy="false" class="bean.Hotel">
+            <column name="hid" />
+        </many-to-one>
+    
+    </class>
+</hibernate-mapping>
